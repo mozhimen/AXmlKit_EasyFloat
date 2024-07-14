@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.mozhimen.basick.utilk.android.util.dp2px
 import com.zj.easyfloat.EasyFloat
 
 class MainActivity : AppCompatActivity() {
@@ -71,8 +72,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun animScale(view: View, isCollapse: Boolean) {
-        val start = if (isCollapse) dip2px(172f) else dip2px(60f)
-        val end = if (isCollapse) dip2px(60f) else dip2px(172f)
+        val start = if (isCollapse) 172f.dp2px() else 60f.dp2px()
+        val end = if (isCollapse) 60f.dp2px() else 172f.dp2px()
 
         val scaleBig = ValueAnimator.ofFloat(start, end)
         scaleBig.duration = 1000
@@ -82,10 +83,5 @@ class MainActivity : AppCompatActivity() {
             view.layoutParams = layoutParams
         }
         scaleBig.start()
-    }
-
-    private fun dip2px(dpValue: Float): Float {
-        val scale: Float = getResources().getDisplayMetrics().density
-        return (dpValue * scale + 0.5f)
     }
 }

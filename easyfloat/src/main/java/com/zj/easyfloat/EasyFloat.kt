@@ -5,7 +5,9 @@ import android.app.Application
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.mozhimen.basick.elemk.commons.IA_Listener
 import com.zj.easyfloat.floatingview.EnFloatingView
 import com.zj.easyfloat.floatingview.FloatingMagnetView
 import com.zj.easyfloat.floatingview.FloatingView
@@ -17,10 +19,15 @@ object EasyFloat : Application.ActivityLifecycleCallbacks {
     private var mLayout: Int = 0
 
     //编辑添加点击和移除事件, 拖动状态，靠边状态
-    private var onRemoveListener: ((FloatingMagnetView) -> Unit)? = null
-    private var onClickListener: ((FloatingMagnetView) -> Unit)? = null
+    private var onRemoveListener: IA_Listener<FloatingMagnetView>? = null
+    private var onClickListener: IA_Listener<FloatingMagnetView>? = null
     private var dragEnable = true
     private var autoMoveToEdge = true
+
+    ///////////////////////////////////////////////////////////////////////////////////
+
+    fun getView(): FloatingMagnetView? =
+        FloatingView.get().view
 
     fun layout(layout: Int): EasyFloat {
         mLayout = layout
@@ -37,10 +44,7 @@ object EasyFloat : Application.ActivityLifecycleCallbacks {
         return this
     }
 
-    fun listener(
-        onRemoveListener: ((View?) -> Unit)? = null,
-        onClickListener: ((View) -> Unit)? = null
-    ): EasyFloat {
+    fun listener(onRemoveListener: IA_Listener<View?>? = null, onClickListener: IA_Listener<View>? = null): EasyFloat {
         this.onRemoveListener = onRemoveListener
         this.onClickListener = onClickListener
         return this
@@ -71,6 +75,19 @@ object EasyFloat : Application.ActivityLifecycleCallbacks {
     fun isAutoMoveToEdge(): Boolean {
         return autoMoveToEdge
     }
+
+    fun show(activity: Activity) {
+        initShow(activity)
+        activity.application.registerActivityLifecycleCallbacks(this)
+    }
+
+    fun dismiss(activity: Activity) {
+        FloatingView.get().remove()
+        FloatingView.get().detach(activity)
+        activity.application.unregisterActivityLifecycleCallbacks(this)
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
 
@@ -107,6 +124,8 @@ object EasyFloat : Application.ActivityLifecycleCallbacks {
 
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////
+
     private fun isActivityInValid(activity: Activity): Boolean {
         return blackList.contains(activity::class.java)
     }
@@ -136,22 +155,12 @@ object EasyFloat : Application.ActivityLifecycleCallbacks {
                     override fun onRemove(magnetView: FloatingMagnetView) {
                         onRemoveListener?.invoke(magnetView)
                     }
+
                     override fun onClick(magnetView: FloatingMagnetView) {
                         onClickListener?.invoke(magnetView)
                     }
                 })
             }
         }
-    }
-
-    fun show(activity: Activity) {
-        initShow(activity)
-        activity.application.registerActivityLifecycleCallbacks(this)
-    }
-
-    fun dismiss(activity: Activity) {
-        FloatingView.get().remove()
-        FloatingView.get().detach(activity)
-        activity.application.unregisterActivityLifecycleCallbacks(this)
     }
 }

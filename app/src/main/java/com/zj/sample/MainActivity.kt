@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity() {
             FrameLayout.LayoutParams.WRAP_CONTENT,
             FrameLayout.LayoutParams.WRAP_CONTENT
         )
-        params.gravity = Gravity.BOTTOM or Gravity.END
-        params.setMargins(0, params.topMargin, params.rightMargin, 500)
+        params.gravity = Gravity.CENTER_VERTICAL or Gravity.START
+        //params.setMargins(0, params.topMargin, params.rightMargin, 500)
         return params
     }
 

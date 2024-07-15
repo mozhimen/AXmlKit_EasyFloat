@@ -18,6 +18,7 @@ object LayoutParamsUtil {
         val layoutParams = FrameLayout.LayoutParams(width, height)
 //        layoutParams.gravity = Gravity.BOTTOM or Gravity.END
 //        layoutParams.setMargins(0, layoutParams.topMargin, layoutParams.rightMargin, 500)
+        layoutParams.block()
         return layoutParams
     }
 }

@@ -1,22 +1,28 @@
 package com.zj.easyfloat
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.mozhimen.basick.elemk.commons.IA_Listener
+import com.mozhimen.basick.utilk.commons.IUtilK
 import com.zj.easyfloat.floatingview.EnFloatingView
 import com.zj.easyfloat.floatingview.FloatingMagnetView
 import com.zj.easyfloat.floatingview.FloatingView
 import com.zj.easyfloat.floatingview.MagnetViewListener
+import java.lang.ref.WeakReference
+import java.util.concurrent.atomic.AtomicBoolean
 
-object EasyFloat : Application.ActivityLifecycleCallbacks {
+@SuppressLint("StaticFieldLeak")
+object EasyFloat : Application.ActivityLifecycleCallbacks, IUtilK {
     private var mLayoutParams = getFloatingLayoutParams()
     private val blackList = mutableListOf<Class<*>>()
     private var mLayout: Int = 0
+    private var mView: View? = null
 
     //编辑添加点击和移除事件, 拖动状态，靠边状态
     private var onRemoveListener: IA_Listener<FloatingMagnetView>? = null
@@ -31,6 +37,11 @@ object EasyFloat : Application.ActivityLifecycleCallbacks {
 
     fun layout(layout: Int): EasyFloat {
         mLayout = layout
+        return this
+    }
+
+    fun layout(view: View): EasyFloat {
+        mView = view
         return this
     }
 
@@ -76,18 +87,36 @@ object EasyFloat : Application.ActivityLifecycleCallbacks {
         return autoMoveToEdge
     }
 
+    fun registerActivityLifecycleCallbacks(application: Application) {
+        if (_isAdd.compareAndSet(false, true)) {
+            application.registerActivityLifecycleCallbacks(this)
+        }
+    }
+
+    fun unregisterActivityLifecycleCallbacks(application: Application) {
+        if (_isAdd.compareAndSet(true, false)) {
+            application.unregisterActivityLifecycleCallbacks(this)
+        }
+    }
+
     fun show(activity: Activity) {
+        Log.d(TAG, "show: activity $activity")
         initShow(activity)
-        activity.application.registerActivityLifecycleCallbacks(this)
+        registerActivityLifecycleCallbacks(activity.application)
     }
 
     fun dismiss(activity: Activity) {
         FloatingView.get().remove()
         FloatingView.get().detach(activity)
-        activity.application.unregisterActivityLifecycleCallbacks(this)
+        unregisterActivityLifecycleCallbacks(activity.application)
     }
 
+    fun isRegisterActivityLifecycleCallbacks(): Boolean =
+        _isAdd.get()
+
     ///////////////////////////////////////////////////////////////////////////////////
+
+    private val _isAdd = AtomicBoolean(false)
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
 
@@ -141,11 +170,21 @@ object EasyFloat : Application.ActivityLifecycleCallbacks {
     }
 
     private fun initShow(activity: Activity) {
+        if (mLayout == 0 && mView == null) {
+            Log.e(TAG, "initShow: return")
+            return
+        }
         activity.let {
             if (FloatingView.get().view == null) {
-                FloatingView.get().customView(
-                    EnFloatingView(activity, mLayout)
-                )
+                if (mView != null) {
+                    FloatingView.get().customView(
+                        EnFloatingView(activity, mView)
+                    )
+                } else {
+                    FloatingView.get().customView(
+                        EnFloatingView(activity, mLayout)
+                    )
+                }
             }
             FloatingView.get().run {
                 layoutParams(mLayoutParams)

@@ -21,8 +21,8 @@ dependencyResolutionManagement {
 rootProject.name = "AXmlKit_EasyFloat"
 include ':easyfloat'
 include ':app'
+include ':xmlk_easyfloat'
 //SwiftKit
 include ':SwiftKit'
 project(':SwiftKit').projectDir = new File("D:\\WorkSpace\\GitHub\\SwiftKit")
 include ':SwiftKit:basick'
-include ':xmlk_easyfloat'

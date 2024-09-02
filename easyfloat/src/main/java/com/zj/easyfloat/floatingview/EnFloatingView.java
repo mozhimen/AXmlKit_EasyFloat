@@ -1,12 +1,16 @@
 package com.zj.easyfloat.floatingview;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
+import com.mozhimen.basick.utilk.android.view.UtilKViewGroup;
+import com.mozhimen.basick.utilk.android.view.UtilKViewGroupWrapper;
 import com.zj.easyfloat.R;
 
 /**
@@ -19,20 +23,28 @@ import com.zj.easyfloat.R;
  */
 public class EnFloatingView extends FloatingMagnetView {
 
-    private final ImageView mIcon;
+//    private final ImageView mIcon;
 
-    public EnFloatingView(@NonNull Context context) {
-        this(context, R.layout.en_floating_view);
-    }
+//    public EnFloatingView(@NonNull Context context) {
+//        this(context, R.layout.en_floating_view);
+//    }
 
     public EnFloatingView(@NonNull Context context, @LayoutRes int resource) {
         super(context, null);
         inflate(context, resource, this);
-        mIcon = findViewById(R.id.icon);
+//        mIcon = findViewById(R.id.icon);
     }
 
-    public void setIconImage(@DrawableRes int resId){
-        mIcon.setImageResource(resId);
+    public EnFloatingView(@NonNull Context context, View view) {
+        this(context, view, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     }
 
+    public EnFloatingView(@NonNull Context context, View view, FrameLayout.LayoutParams layoutParams) {
+        super(context, null);
+        UtilKViewGroup.addViewSafe(this, view, layoutParams);
+    }
+
+//    public void setIconImage(@DrawableRes int resId){
+//        mIcon.setImageResource(resId);
+//    }
 }

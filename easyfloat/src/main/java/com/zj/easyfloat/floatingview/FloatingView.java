@@ -31,10 +31,10 @@ public class FloatingView implements IFloatingView {
     private FloatingMagnetView mEnFloatingView;
     private static volatile FloatingView mInstance;
     private WeakReference<FrameLayout> mContainer;
-    @LayoutRes
-    private int mLayoutId = R.layout.en_floating_view;
-    @DrawableRes
-    private int mIconRes = R.drawable.imuxuan;
+//    @LayoutRes
+    private int mLayoutId = 0;//R.layout.en_floating_view;
+//    @DrawableRes
+//    private int mIconRes = R.drawable.imuxuan;
     private ViewGroup.LayoutParams mLayoutParams = getParams();
 
     private FloatingView() {
@@ -76,7 +76,7 @@ public class FloatingView implements IFloatingView {
             EnFloatingView enFloatingView = new EnFloatingView(EnContext.get(), mLayoutId);
             mEnFloatingView = enFloatingView;
             enFloatingView.setLayoutParams(mLayoutParams);
-            enFloatingView.setIconImage(mIconRes);
+//            enFloatingView.setIconImage(mIconRes);
             addViewToWindow(enFloatingView);
         }
     }
@@ -132,11 +132,11 @@ public class FloatingView implements IFloatingView {
         return mEnFloatingView;
     }
 
-    @Override
-    public FloatingView icon(@DrawableRes int resId) {
-        mIconRes = resId;
-        return this;
-    }
+//    @Override
+//    public FloatingView icon(@DrawableRes int resId) {
+//        mIconRes = resId;
+//        return this;
+//    }
 
     @Override
     public FloatingView customView(FloatingMagnetView viewGroup) {

@@ -28,7 +28,7 @@ public interface IFloatingView {
 
     FloatingMagnetView getView();
 
-    FloatingView icon(@DrawableRes int resId);
+//    FloatingView icon(@DrawableRes int resId);
 
     FloatingView customView(FloatingMagnetView viewGroup);
 

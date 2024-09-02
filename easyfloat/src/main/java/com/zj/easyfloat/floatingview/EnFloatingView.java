@@ -3,15 +3,11 @@ package com.zj.easyfloat.floatingview;
 import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-
-import androidx.annotation.DrawableRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
-import com.mozhimen.basick.utilk.android.view.UtilKViewGroup;
-import com.mozhimen.basick.utilk.android.view.UtilKViewGroupWrapper;
-import com.zj.easyfloat.R;
+import com.mozhimen.kotlin.utilk.android.view.UtilKViewGroup;
+
 
 /**
  * @ClassName EnFloatingView

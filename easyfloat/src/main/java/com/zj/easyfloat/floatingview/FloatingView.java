@@ -8,11 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-
-import androidx.annotation.DrawableRes;
 import androidx.annotation.LayoutRes;
 import androidx.core.view.ViewCompat;
-import com.zj.easyfloat.R;
 import com.zj.easyfloat.floatingview.utils.EnContext;
 
 import java.lang.ref.WeakReference;

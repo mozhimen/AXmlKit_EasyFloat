@@ -8,13 +8,12 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
-import com.mozhimen.basick.elemk.commons.IA_Listener
-import com.mozhimen.basick.utilk.commons.IUtilK
+import com.mozhimen.kotlin.elemk.commons.IA_Listener
+import com.mozhimen.kotlin.utilk.commons.IUtilK
 import com.zj.easyfloat.floatingview.EnFloatingView
 import com.zj.easyfloat.floatingview.FloatingMagnetView
 import com.zj.easyfloat.floatingview.FloatingView
 import com.zj.easyfloat.floatingview.MagnetViewListener
-import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
 
 @SuppressLint("StaticFieldLeak")

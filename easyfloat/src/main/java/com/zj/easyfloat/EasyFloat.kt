@@ -110,6 +110,7 @@ object EasyFloat : Application.ActivityLifecycleCallbacks, IUtilK {
         unregisterActivityLifecycleCallbacks(activity.application)
     }
 
+    @JvmStatic
     fun isRegisterActivityLifecycleCallbacks(): Boolean =
         _isAdd.get()
 

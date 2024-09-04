@@ -1,14 +1,13 @@
 package com.mozhimen.xmlk.easyfloat
 
 import android.app.Activity
-import android.util.Log
 import androidx.lifecycle.LifecycleOwner
-import com.mozhimen.basick.elemk.androidx.lifecycle.bases.BaseWakeBefDestroyLifecycleObserver
-import com.mozhimen.basick.elemk.commons.IExt_AListener
-import com.mozhimen.basick.elemk.commons.IExt_Listener
-import com.mozhimen.basick.lintk.optins.OApiCall_BindLifecycle
-import com.mozhimen.basick.lintk.optins.OApiInit_ByLazy
-import com.mozhimen.basick.utilk.android.util.UtilKLogWrapper
+import com.mozhimen.basick.bases.BaseWakeBefDestroyLifecycleObserver
+import com.mozhimen.kotlin.elemk.commons.IExt_AListener
+import com.mozhimen.kotlin.elemk.commons.IExt_Listener
+import com.mozhimen.kotlin.lintk.optins.OApiCall_BindLifecycle
+import com.mozhimen.kotlin.lintk.optins.OApiInit_ByLazy
+import com.mozhimen.kotlin.utilk.android.util.UtilKLogWrapper
 import com.zj.easyfloat.EasyFloat
 import com.zj.easyfloat.floatingview.FloatingMagnetView
 

@@ -10,7 +10,10 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import androidx.annotation.LayoutRes;
 import androidx.core.view.ViewCompat;
-import com.zj.easyfloat.floatingview.utils.EnContext;
+
+import com.mozhimen.kotlin.utilk.android.app.UtilKApplicationWrapper;
+import com.zj.easyfloat.floatingview.commons.IFloatProvider;
+import com.zj.easyfloat.floatingview.commons.IMagnetViewListener;
 
 import java.lang.ref.WeakReference;
 
@@ -23,13 +26,13 @@ import java.lang.ref.WeakReference;
  * @Mender Yunpeng Li
  * @Modification 2018/3/15 下午5:05
  */
-public class FloatingView implements IFloatingView {
+public class FloatingView implements IFloatProvider {
 
     private FloatingMagnetView mEnFloatingView;
     private static volatile FloatingView mInstance;
     private WeakReference<FrameLayout> mContainer;
 //    @LayoutRes
-    private int mLayoutId = 0;//R.layout.en_floating_view;
+//    private int mLayoutId = 0;//R.layout.en_floating_view;
 //    @DrawableRes
 //    private int mIconRes = R.drawable.imuxuan;
     private ViewGroup.LayoutParams mLayoutParams = getParams();
@@ -70,7 +73,7 @@ public class FloatingView implements IFloatingView {
             if (mEnFloatingView != null) {
                 return;
             }
-            EnFloatingView enFloatingView = new EnFloatingView(EnContext.get(), mLayoutId);
+            EnFloatingView enFloatingView = new EnFloatingView(UtilKApplicationWrapper.getInstance().get(), mLayoutId);
             mEnFloatingView = enFloatingView;
             enFloatingView.setLayoutParams(mLayoutParams);
 //            enFloatingView.setIconImage(mIconRes);
@@ -157,7 +160,7 @@ public class FloatingView implements IFloatingView {
     }
 
     @Override
-    public FloatingView listener(MagnetViewListener magnetViewListener) {
+    public FloatingView listener(IMagnetViewListener magnetViewListener) {
         if (mEnFloatingView != null) {
             mEnFloatingView.setMagnetViewListener(magnetViewListener);
         }

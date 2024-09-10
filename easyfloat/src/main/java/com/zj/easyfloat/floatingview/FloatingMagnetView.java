@@ -9,8 +9,9 @@ import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import com.mozhimen.kotlin.utilk.android.view.UtilKStatusBar;
+import com.zj.easyfloat.floatingview.commons.IMagnetViewListener;
 
-import com.zj.easyfloat.floatingview.utils.SystemUtils;
 
 /**
  * @ClassName FloatingMagnetView
@@ -27,7 +28,7 @@ public class FloatingMagnetView extends FrameLayout {
     private float mOriginalRawY;
     private float mOriginalX;
     private float mOriginalY;
-    private MagnetViewListener mMagnetViewListener;
+    private IMagnetViewListener mMagnetViewListener;
     private static final int TOUCH_TIME_THRESHOLD = 150;
     private long mLastTouchDownTime;
     protected MoveAnimator mMoveAnimator;
@@ -39,7 +40,7 @@ public class FloatingMagnetView extends FrameLayout {
     private boolean dragEnable = true;
     private boolean autoMoveToEdge = true;
 
-    public void setMagnetViewListener(MagnetViewListener magnetViewListener) {
+    public void setMagnetViewListener(IMagnetViewListener magnetViewListener) {
         this.mMagnetViewListener = magnetViewListener;
     }
 
@@ -58,7 +59,7 @@ public class FloatingMagnetView extends FrameLayout {
 
     private void init() {
         mMoveAnimator = new MoveAnimator();
-        mStatusBarHeight = SystemUtils.getStatusBarHeight(getContext());
+        mStatusBarHeight = UtilKStatusBar.getHeight();
         setClickable(true);
 //        updateSize();
     }

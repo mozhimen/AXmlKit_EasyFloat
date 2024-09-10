@@ -1,18 +1,20 @@
-package com.zj.easyfloat.floatingview;
+package com.zj.easyfloat.floatingview.commons;
 
 import android.app.Activity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.LayoutRes;
+
+import com.zj.easyfloat.floatingview.FloatingMagnetView;
+import com.zj.easyfloat.floatingview.FloatingView;
 
 
 /**
  * Created by Yunpeng Li on 2018/3/15.
  */
 
-public interface IFloatingView {
+public interface IFloatProvider {
 
     FloatingView remove();
 
@@ -36,7 +38,7 @@ public interface IFloatingView {
 
     FloatingView layoutParams(ViewGroup.LayoutParams params);
 
-    FloatingView listener(MagnetViewListener magnetViewListener);
+    FloatingView listener(IMagnetViewListener magnetViewListener);
 
     FloatingView dragEnable(boolean dragEnable);
 

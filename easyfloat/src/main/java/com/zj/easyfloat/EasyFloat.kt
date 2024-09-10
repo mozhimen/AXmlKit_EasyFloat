@@ -13,7 +13,7 @@ import com.mozhimen.kotlin.utilk.commons.IUtilK
 import com.zj.easyfloat.floatingview.EnFloatingView
 import com.zj.easyfloat.floatingview.FloatingMagnetView
 import com.zj.easyfloat.floatingview.FloatingView
-import com.zj.easyfloat.floatingview.MagnetViewListener
+import com.zj.easyfloat.floatingview.commons.IMagnetViewListener
 import java.util.concurrent.atomic.AtomicBoolean
 
 @SuppressLint("StaticFieldLeak")
@@ -190,7 +190,7 @@ object EasyFloat : Application.ActivityLifecycleCallbacks, IUtilK {
                 layoutParams(mLayoutParams)
                 attach(it)
                 dragEnable(dragEnable)
-                this.listener(object : MagnetViewListener {
+                this.listener(object : IMagnetViewListener {
                     override fun onRemove(magnetView: FloatingMagnetView) {
                         onRemoveListener?.invoke(magnetView)
                     }

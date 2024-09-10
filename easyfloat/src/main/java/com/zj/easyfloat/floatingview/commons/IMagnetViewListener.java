@@ -1,9 +1,11 @@
-package com.zj.easyfloat.floatingview;
+package com.zj.easyfloat.floatingview.commons;
+
+import com.zj.easyfloat.floatingview.FloatingMagnetView;
 
 /**
  * Created by liyunpeng on 17/11/29.
  */
-public interface MagnetViewListener {
+public interface IMagnetViewListener {
 
     void onRemove(FloatingMagnetView magnetView);
 

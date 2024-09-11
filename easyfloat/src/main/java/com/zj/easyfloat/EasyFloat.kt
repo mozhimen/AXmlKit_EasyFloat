@@ -10,10 +10,10 @@ import android.view.View
 import android.widget.FrameLayout
 import com.mozhimen.kotlin.elemk.commons.IA_Listener
 import com.mozhimen.kotlin.utilk.commons.IUtilK
-import com.zj.easyfloat.floatingview.EnFloatingView
-import com.zj.easyfloat.floatingview.FloatingMagnetView
-import com.zj.easyfloat.floatingview.FloatingView
-import com.zj.easyfloat.floatingview.commons.IMagnetViewListener
+import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet
+import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet2
+import com.mozhimen.xmlk.layoutk.magnet.commons.ILayoutKMagnetListener
+import com.zj.easyfloat.helpers.EasyFloatProxy
 import java.util.concurrent.atomic.AtomicBoolean
 
 @SuppressLint("StaticFieldLeak")
@@ -24,15 +24,15 @@ object EasyFloat : Application.ActivityLifecycleCallbacks, IUtilK {
     private var mView: View? = null
 
     //编辑添加点击和移除事件, 拖动状态，靠边状态
-    private var onRemoveListener: IA_Listener<FloatingMagnetView>? = null
-    private var onClickListener: IA_Listener<FloatingMagnetView>? = null
+    private var onRemoveListener: IA_Listener<LayoutKMagnet>? = null
+    private var onClickListener: IA_Listener<LayoutKMagnet>? = null
     private var dragEnable = true
     private var autoMoveToEdge = true
 
     ///////////////////////////////////////////////////////////////////////////////////
 
-    fun getView(): FloatingMagnetView? =
-        FloatingView.get().view
+    fun getView(): LayoutKMagnet? =
+        EasyFloatProxy.get().view
 
     fun layout(layout: Int): EasyFloat {
         mLayout = layout
@@ -65,7 +65,7 @@ object EasyFloat : Application.ActivityLifecycleCallbacks, IUtilK {
      */
     fun dragEnable(dragEnable: Boolean): EasyFloat {
         this.dragEnable = dragEnable
-        FloatingView.get().view?.updateDragState(dragEnable)
+        EasyFloatProxy.get().view?.updateDragState(dragEnable)
         return this
     }
 
@@ -78,7 +78,7 @@ object EasyFloat : Application.ActivityLifecycleCallbacks, IUtilK {
      */
     fun setAutoMoveToEdge(autoMoveToEdge: Boolean): EasyFloat {
         this.autoMoveToEdge = autoMoveToEdge
-        FloatingView.get().view?.setAutoMoveToEdge(autoMoveToEdge)
+        EasyFloatProxy.get().view?.setAutoMoveToEdge(autoMoveToEdge)
         return this
     }
 
@@ -105,8 +105,8 @@ object EasyFloat : Application.ActivityLifecycleCallbacks, IUtilK {
     }
 
     fun dismiss(activity: Activity) {
-        FloatingView.get().remove()
-        FloatingView.get().detach(activity)
+        EasyFloatProxy.get().remove()
+        EasyFloatProxy.get().detach(activity)
         unregisterActivityLifecycleCallbacks(activity.application)
     }
 
@@ -142,7 +142,7 @@ object EasyFloat : Application.ActivityLifecycleCallbacks, IUtilK {
         if (isActivityInValid(activity)) {
             return
         }
-        FloatingView.get().detach(activity)
+        EasyFloatProxy.get().detach(activity)
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
@@ -175,28 +175,28 @@ object EasyFloat : Application.ActivityLifecycleCallbacks, IUtilK {
             return
         }
         activity.let {
-            if (FloatingView.get().view == null) {
+            if (EasyFloatProxy.get().view == null) {
                 if (mView != null) {
-                    FloatingView.get().customView(
-                        EnFloatingView(activity, mView)
+                    EasyFloatProxy.get().customView(
+                        LayoutKMagnet2(activity, mView!!)
                     )
                 } else {
-                    FloatingView.get().customView(
-                        EnFloatingView(activity, mLayout)
+                    EasyFloatProxy.get().customView(
+                        LayoutKMagnet2(activity, mLayout)
                     )
                 }
             }
-            FloatingView.get().run {
+            EasyFloatProxy.get().run {
                 layoutParams(mLayoutParams)
                 attach(it)
                 dragEnable(dragEnable)
-                this.listener(object : IMagnetViewListener {
-                    override fun onRemove(magnetView: FloatingMagnetView) {
-                        onRemoveListener?.invoke(magnetView)
+                this.listener(object : ILayoutKMagnetListener {
+                    override fun onRemoved(layoutKMagnet: LayoutKMagnet) {
+                        onRemoveListener?.invoke(layoutKMagnet)
                     }
 
-                    override fun onClick(magnetView: FloatingMagnetView) {
-                        onClickListener?.invoke(magnetView)
+                    override fun onClicked(layoutKMagnet: LayoutKMagnet) {
+                        onClickListener?.invoke(layoutKMagnet)
                     }
                 })
             }

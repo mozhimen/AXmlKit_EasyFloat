@@ -4,12 +4,11 @@ import android.app.Activity
 import androidx.lifecycle.LifecycleOwner
 import com.mozhimen.basick.bases.BaseWakeBefDestroyLifecycleObserver
 import com.mozhimen.kotlin.elemk.commons.IExt_AListener
-import com.mozhimen.kotlin.elemk.commons.IExt_Listener
 import com.mozhimen.kotlin.lintk.optins.OApiCall_BindLifecycle
 import com.mozhimen.kotlin.lintk.optins.OApiInit_ByLazy
 import com.mozhimen.kotlin.utilk.android.util.UtilKLogWrapper
+import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet
 import com.zj.easyfloat.EasyFloat
-import com.zj.easyfloat.floatingview.FloatingMagnetView
 
 /**
  * @ClassName XmlKEasyFloatProxy
@@ -50,7 +49,7 @@ class XmlKEasyFloatProxy(private var _activity: Activity?) : BaseWakeBefDestroyL
         }
     }
 
-    fun getEasyFloatView(): FloatingMagnetView? =
+    fun getEasyFloatView(): LayoutKMagnet? =
         if (_isShow) EasyFloat.getView() else null
 
     fun dismiss() {

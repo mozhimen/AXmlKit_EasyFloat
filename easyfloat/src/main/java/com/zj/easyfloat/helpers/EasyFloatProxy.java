@@ -1,4 +1,4 @@
-package com.zj.easyfloat.floatingview;
+package com.zj.easyfloat.helpers;
 
 import android.app.Activity;
 import android.os.Handler;
@@ -12,9 +12,10 @@ import androidx.annotation.LayoutRes;
 import androidx.core.view.ViewCompat;
 
 import com.mozhimen.kotlin.utilk.android.app.UtilKApplicationWrapper;
-import com.zj.easyfloat.floatingview.commons.IFloatProvider;
-import com.zj.easyfloat.floatingview.commons.IMagnetViewListener;
-
+import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet;
+import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet2;
+import com.mozhimen.xmlk.layoutk.magnet.commons.ILayoutKMagnetListener;
+import com.zj.easyfloat.commons.IEasyFloat;
 import java.lang.ref.WeakReference;
 
 
@@ -26,33 +27,37 @@ import java.lang.ref.WeakReference;
  * @Mender Yunpeng Li
  * @Modification 2018/3/15 下午5:05
  */
-public class FloatingView implements IFloatProvider {
+public class EasyFloatProxy implements IEasyFloat {
 
-    private FloatingMagnetView mEnFloatingView;
-    private static volatile FloatingView mInstance;
-    private WeakReference<FrameLayout> mContainer;
-//    @LayoutRes
-//    private int mLayoutId = 0;//R.layout.en_floating_view;
-//    @DrawableRes
-//    private int mIconRes = R.drawable.imuxuan;
-    private ViewGroup.LayoutParams mLayoutParams = getParams();
+    private static volatile EasyFloatProxy mInstance;
 
-    private FloatingView() {
+    private EasyFloatProxy() {
     }
 
-    public static FloatingView get() {
+    public static EasyFloatProxy get() {
         if (mInstance == null) {
-            synchronized (FloatingView.class) {
+            synchronized (EasyFloatProxy.class) {
                 if (mInstance == null) {
-                    mInstance = new FloatingView();
+                    mInstance = new EasyFloatProxy();
                 }
             }
         }
         return mInstance;
     }
 
+    ////////////////////////////////////////////////////////
+
+    private LayoutKMagnet mEnFloatingView;
+    @LayoutRes
+    private int mLayoutId = 0;//R.layout.en_floating_view;
+    //    @DrawableRes
+//    private int mIconRes = R.drawable.imuxuan;
+    private ViewGroup.LayoutParams mLayoutParams = getParams();
+    private WeakReference<FrameLayout> mContainer;
+
+
     @Override
-    public FloatingView remove() {
+    public EasyFloatProxy remove() {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -73,7 +78,7 @@ public class FloatingView implements IFloatProvider {
             if (mEnFloatingView != null) {
                 return;
             }
-            EnFloatingView enFloatingView = new EnFloatingView(UtilKApplicationWrapper.getInstance().get(), mLayoutId);
+            LayoutKMagnet2 enFloatingView = new LayoutKMagnet2(UtilKApplicationWrapper.getInstance().get(), mLayoutId);
             mEnFloatingView = enFloatingView;
             enFloatingView.setLayoutParams(mLayoutParams);
 //            enFloatingView.setIconImage(mIconRes);
@@ -82,19 +87,19 @@ public class FloatingView implements IFloatProvider {
     }
 
     @Override
-    public FloatingView add() {
+    public EasyFloatProxy add() {
         ensureFloatingView();
         return this;
     }
 
     @Override
-    public FloatingView attach(Activity activity) {
+    public EasyFloatProxy attach(Activity activity) {
         attach(getActivityRoot(activity));
         return this;
     }
 
     @Override
-    public FloatingView attach(FrameLayout container) {
+    public EasyFloatProxy attach(FrameLayout container) {
         if (container == null || mEnFloatingView == null) {
             mContainer = new WeakReference<>(container);
             return this;
@@ -111,13 +116,13 @@ public class FloatingView implements IFloatProvider {
     }
 
     @Override
-    public FloatingView detach(Activity activity) {
+    public EasyFloatProxy detach(Activity activity) {
         detach(getActivityRoot(activity));
         return this;
     }
 
     @Override
-    public FloatingView detach(FrameLayout container) {
+    public EasyFloatProxy detach(FrameLayout container) {
         if (mEnFloatingView != null && container != null && ViewCompat.isAttachedToWindow(mEnFloatingView)) {
             container.removeView(mEnFloatingView);
         }
@@ -128,7 +133,7 @@ public class FloatingView implements IFloatProvider {
     }
 
     @Override
-    public FloatingMagnetView getView() {
+    public LayoutKMagnet getView() {
         return mEnFloatingView;
     }
 
@@ -139,19 +144,19 @@ public class FloatingView implements IFloatProvider {
 //    }
 
     @Override
-    public FloatingView customView(FloatingMagnetView viewGroup) {
+    public EasyFloatProxy customView(LayoutKMagnet viewGroup) {
         mEnFloatingView = viewGroup;
         return this;
     }
 
     @Override
-    public FloatingView customView(@LayoutRes int resource) {
+    public EasyFloatProxy customView(@LayoutRes int resource) {
         mLayoutId = resource;
         return this;
     }
 
     @Override
-    public FloatingView layoutParams(ViewGroup.LayoutParams params) {
+    public EasyFloatProxy layoutParams(ViewGroup.LayoutParams params) {
         mLayoutParams = params;
         if (mEnFloatingView != null) {
             mEnFloatingView.setLayoutParams(params);
@@ -160,7 +165,7 @@ public class FloatingView implements IFloatProvider {
     }
 
     @Override
-    public FloatingView listener(IMagnetViewListener magnetViewListener) {
+    public EasyFloatProxy listener(ILayoutKMagnetListener magnetViewListener) {
         if (mEnFloatingView != null) {
             mEnFloatingView.setMagnetViewListener(magnetViewListener);
         }
@@ -168,7 +173,7 @@ public class FloatingView implements IFloatProvider {
     }
 
     @Override
-    public FloatingView dragEnable(boolean dragEnable) {
+    public EasyFloatProxy dragEnable(boolean dragEnable) {
         if (mEnFloatingView != null) {
             mEnFloatingView.updateDragState(dragEnable);
         }
@@ -176,7 +181,7 @@ public class FloatingView implements IFloatProvider {
     }
 
     @Override
-    public FloatingView setAutoMoveToEdge(boolean autoMoveToEdge) {
+    public EasyFloatProxy setAutoMoveToEdge(boolean autoMoveToEdge) {
         if (mEnFloatingView != null) {
             mEnFloatingView.setAutoMoveToEdge(autoMoveToEdge);
         }

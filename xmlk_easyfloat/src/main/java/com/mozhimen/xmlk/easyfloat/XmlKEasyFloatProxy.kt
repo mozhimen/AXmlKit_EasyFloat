@@ -21,8 +21,7 @@ import com.zj.easyfloat.EasyFloat
 @OApiCall_BindLifecycle
 class XmlKEasyFloatProxy(private var _activity: Activity?) : BaseWakeBefDestroyLifecycleObserver() {
 
-    private var _eastFloat: EasyFloat? = null
-    private var _isShow: Boolean = false
+    private val _eastFloat: EasyFloat by lazy { EasyFloat.instance }
 
     ////////////////////////////////////////////////////////////////////////
 
@@ -37,25 +36,25 @@ class XmlKEasyFloatProxy(private var _activity: Activity?) : BaseWakeBefDestroyL
         //                initListener(it)
         //            }
         //            .show(this)
-        return EasyFloat.block().also { _eastFloat = it }
+        return _eastFloat.block()
     }
 
     fun show() {
-        if (_activity != null && !_isShow) {
-            _isShow = true
-            _eastFloat?.show(_activity!!)
+        if (_activity != null) {
+            _eastFloat.show(_activity!!)
         } else {
-            UtilKLogWrapper.e(TAG, "show: _activity != null && !_isShow ${_activity != null} && ${!_isShow}")
+            UtilKLogWrapper.e(TAG, "show: _activity != null && !_isShow ${_activity != null} && ${!_eastFloat.isRegisterActivityLifecycleCallbacks()}")
         }
     }
 
     fun getEasyFloatView(): LayoutKMagnet? =
-        if (_isShow) EasyFloat.getView() else null
+        if (_eastFloat.isRegisterActivityLifecycleCallbacks())
+            _eastFloat.getFloatContainer()
+        else null
 
     fun dismiss() {
         if (_activity != null) {
-            _isShow = false
-            EasyFloat.dismiss(_activity!!)
+            _eastFloat.dismiss(_activity!!)
         }
     }
 
@@ -64,7 +63,6 @@ class XmlKEasyFloatProxy(private var _activity: Activity?) : BaseWakeBefDestroyL
     override fun onDestroy(owner: LifecycleOwner) {
         dismiss()
         _activity = null
-        _eastFloat = null
         super.onDestroy(owner)
     }
 }

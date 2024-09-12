@@ -3,87 +3,140 @@ package com.zj.easyfloat
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
-import android.os.Bundle
+import android.content.Context
 import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
-import com.mozhimen.kotlin.elemk.commons.IA_Listener
+import androidx.lifecycle.LifecycleOwner
+import com.mozhimen.kotlin.elemk.android.app.bases.BaseActivityLifecycleCallbacks
+import com.mozhimen.kotlin.lintk.optins.OApiInit_ByLazy
 import com.mozhimen.kotlin.utilk.commons.IUtilK
 import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet
-import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet2
-import com.mozhimen.xmlk.layoutk.magnet.commons.ILayoutKMagnetListener
+import com.zj.easyfloat.commons.IEasyFloat
 import com.zj.easyfloat.helpers.EasyFloatProxy
 import java.util.concurrent.atomic.AtomicBoolean
 
 @SuppressLint("StaticFieldLeak")
-object EasyFloat : Application.ActivityLifecycleCallbacks, IUtilK {
-    private var mLayoutParams = getFloatingLayoutParams()
-    private val blackList = mutableListOf<Class<*>>()
-    private var mLayout: Int = 0
-    private var mView: View? = null
+class EasyFloat : BaseActivityLifecycleCallbacks(), IEasyFloat<EasyFloat>, IUtilK {
+    companion object{
+        @JvmStatic
+        val instance = INSTANCE.holder
+    }
 
-    //编辑添加点击和移除事件, 拖动状态，靠边状态
-    private var onRemoveListener: IA_Listener<LayoutKMagnet>? = null
-    private var onClickListener: IA_Listener<LayoutKMagnet>? = null
-    private var dragEnable = true
-    private var autoMoveToEdge = true
+    private object INSTANCE {
+        val holder = EasyFloat()
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////
 
-    fun getView(): LayoutKMagnet? =
-        EasyFloatProxy.get().view
+    @OptIn(OApiInit_ByLazy::class)
+    private val _easyFloatProxy by lazy { EasyFloatProxy() }
+    private val _blackList = mutableListOf<Class<*>>()
+    private val _isAdd = AtomicBoolean(false)
 
-    fun layout(layout: Int): EasyFloat {
-        mLayout = layout
+    ///////////////////////////////////////////////////////////////////////////////////
+    @OptIn(OApiInit_ByLazy::class)
+    override fun getLifecycleOwner(): LifecycleOwner {
+        return _easyFloatProxy.getLifecycleOwner()
+    }
+
+    @OptIn(OApiInit_ByLazy::class)
+    override fun getFloatContainer(): LayoutKMagnet? {
+        return _easyFloatProxy.getFloatContainer()
+    }
+
+    @OptIn(OApiInit_ByLazy::class)
+    override fun getLayoutId(): Int {
+        return _easyFloatProxy.getLayoutId()
+    }
+
+    @OptIn(OApiInit_ByLazy::class)
+    override fun getLayout(): View? {
+        return _easyFloatProxy.getLayout()
+    }
+
+    @OptIn(OApiInit_ByLazy::class)
+    override fun customView(intLayoutId: Int): EasyFloat {
+        _easyFloatProxy.customView(intLayoutId)
         return this
     }
 
-    fun layout(view: View): EasyFloat {
-        mView = view
+    @OptIn(OApiInit_ByLazy::class)
+    override fun customView(view: View): EasyFloat {
+        _easyFloatProxy.customView(view)
         return this
     }
 
-    fun layoutParams(layoutParams: FrameLayout.LayoutParams): EasyFloat {
-        mLayoutParams = layoutParams
+    @OptIn(OApiInit_ByLazy::class)
+    override fun layoutParams(layoutParams: FrameLayout.LayoutParams): EasyFloat {
+        _easyFloatProxy.layoutParams(layoutParams)
         return this
     }
 
-    fun blackList(blackList: MutableList<Class<*>>): EasyFloat {
-        EasyFloat.blackList.addAll(blackList)
-        return this
-    }
-
-    fun listener(onRemoveListener: IA_Listener<View?>? = null, onClickListener: IA_Listener<View>? = null): EasyFloat {
-        this.onRemoveListener = onRemoveListener
-        this.onClickListener = onClickListener
-        return this
-    }
+//    override fun listener(magnetViewListener: ILayoutKMagnetListener): EasyFloat {
+//        _easyFloatProxy.listener(magnetViewListener)
+//        return this
+//    }
 
     /**
      * 是否可拖拽（位置是否固定）
      */
-    fun dragEnable(dragEnable: Boolean): EasyFloat {
-        this.dragEnable = dragEnable
-        EasyFloatProxy.get().view?.updateDragState(dragEnable)
+    @OptIn(OApiInit_ByLazy::class)
+    override fun dragEnable(dragEnable: Boolean): EasyFloat {
+        _easyFloatProxy.dragEnable(dragEnable)
         return this
-    }
-
-    fun isDragEnable(): Boolean {
-        return dragEnable
     }
 
     /**
      * 是否自动靠边
      */
-    fun setAutoMoveToEdge(autoMoveToEdge: Boolean): EasyFloat {
-        this.autoMoveToEdge = autoMoveToEdge
-        EasyFloatProxy.get().view?.setAutoMoveToEdge(autoMoveToEdge)
+    @OptIn(OApiInit_ByLazy::class)
+    override fun setAutoMoveToEdge(autoMoveToEdge: Boolean): EasyFloat {
+        _easyFloatProxy.setAutoMoveToEdge(autoMoveToEdge)
         return this
     }
 
-    fun isAutoMoveToEdge(): Boolean {
-        return autoMoveToEdge
+    @OptIn(OApiInit_ByLazy::class)
+    override fun add(context: Context): EasyFloat {
+        _easyFloatProxy.add(context)
+        return this
+    }
+
+    @OptIn(OApiInit_ByLazy::class)
+    override fun remove(): EasyFloat {
+        _easyFloatProxy.remove()
+        return this
+    }
+
+    @OptIn(OApiInit_ByLazy::class)
+    override fun attach(activity: Activity): EasyFloat {
+        _easyFloatProxy.attach(activity)
+        return this
+    }
+
+    @OptIn(OApiInit_ByLazy::class)
+    override fun attach(container: FrameLayout?): EasyFloat {
+        _easyFloatProxy.attach(container)
+        return this
+    }
+
+    @OptIn(OApiInit_ByLazy::class)
+    override fun detach(activity: Activity): EasyFloat {
+        _easyFloatProxy.detach(activity)
+        return this
+    }
+
+    @OptIn(OApiInit_ByLazy::class)
+    override fun detach(container: FrameLayout?): EasyFloat {
+        _easyFloatProxy.detach(container)
+        return this
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////
+
+    fun addBlackList(blackList: MutableList<Class<*>>): EasyFloat {
+        _blackList.addAll(blackList)
+        return this
     }
 
     fun registerActivityLifecycleCallbacks(application: Application) {
@@ -100,106 +153,36 @@ object EasyFloat : Application.ActivityLifecycleCallbacks, IUtilK {
 
     fun show(activity: Activity) {
         Log.d(TAG, "show: activity $activity")
-        initShow(activity)
+        attach(activity)
         registerActivityLifecycleCallbacks(activity.application)
     }
 
     fun dismiss(activity: Activity) {
-        EasyFloatProxy.get().remove()
-        EasyFloatProxy.get().detach(activity)
         unregisterActivityLifecycleCallbacks(activity.application)
+        detach(activity)
+        remove()
     }
 
-    @JvmStatic
     fun isRegisterActivityLifecycleCallbacks(): Boolean =
         _isAdd.get()
 
     ///////////////////////////////////////////////////////////////////////////////////
 
-    private val _isAdd = AtomicBoolean(false)
-
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-
-    }
-
     override fun onActivityStarted(activity: Activity) {
-        if (isActivityInValid(activity)) {
-            return
-        }
-        initShow(activity)
-    }
-
-    override fun onActivityResumed(activity: Activity) {
-        if (isActivityInValid(activity)) {
-            return
-        }
-    }
-
-    override fun onActivityPaused(activity: Activity) {
+        if (isActivityInValid(activity)) return
+        Log.d(TAG, "onActivityStarted: activity $activity")
+        attach(activity)
     }
 
     override fun onActivityStopped(activity: Activity) {
-        if (isActivityInValid(activity)) {
-            return
-        }
-        EasyFloatProxy.get().detach(activity)
-    }
-
-    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-
-    }
-
-    override fun onActivityDestroyed(activity: Activity) {
-
+        if (isActivityInValid(activity)) return
+        Log.d(TAG, "onActivityStopped: activity $activity")
+        detach(activity)
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
 
     private fun isActivityInValid(activity: Activity): Boolean {
-        return blackList.contains(activity::class.java)
-    }
-
-    private fun getFloatingLayoutParams(): FrameLayout.LayoutParams {
-        val params = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT
-        )
-        params.gravity = Gravity.BOTTOM or Gravity.START
-        params.setMargins(0, params.topMargin, params.rightMargin, 500)
-        return params
-    }
-
-    private fun initShow(activity: Activity) {
-        if (mLayout == 0 && mView == null) {
-            Log.e(TAG, "initShow: return")
-            return
-        }
-        activity.let {
-            if (EasyFloatProxy.get().view == null) {
-                if (mView != null) {
-                    EasyFloatProxy.get().customView(
-                        LayoutKMagnet2(activity, mView!!)
-                    )
-                } else {
-                    EasyFloatProxy.get().customView(
-                        LayoutKMagnet2(activity, mLayout)
-                    )
-                }
-            }
-            EasyFloatProxy.get().run {
-                layoutParams(mLayoutParams)
-                attach(it)
-                dragEnable(dragEnable)
-                this.listener(object : ILayoutKMagnetListener {
-                    override fun onRemoved(layoutKMagnet: LayoutKMagnet) {
-                        onRemoveListener?.invoke(layoutKMagnet)
-                    }
-
-                    override fun onClicked(layoutKMagnet: LayoutKMagnet) {
-                        onClickListener?.invoke(layoutKMagnet)
-                    }
-                })
-            }
-        }
+        return _blackList.contains(activity::class.java)
     }
 }

@@ -2,10 +2,8 @@ package com.zj.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.mozhimen.mvvmk.bases.activity.viewbinding.BaseActivityVB
+import com.zj.sample.databinding.ActivityThirdBinding
 
-class ThirdActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_third)
-    }
+class ThirdActivity : BaseActivityVB<ActivityThirdBinding>() {
 }

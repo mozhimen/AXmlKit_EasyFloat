@@ -30,10 +30,23 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures{
+        viewBinding true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.5.10'
+    }
+    packaging {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
 }
 
 dependencies {
-    implementation project(':SwiftKit:basick')
+    implementation project(':SwiftKit:composek')
+    implementation project(':SwiftKit:mvvmk')
 //    if (useLocal == "true") {
     implementation project(':easyfloat')
 //    } else {

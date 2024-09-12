@@ -1,6 +1,5 @@
 package com.mozhimen.xmlk.easyfloat.utils
 
-import android.view.Gravity
 import android.widget.FrameLayout
 import androidx.annotation.Px
 import com.mozhimen.kotlin.elemk.commons.IExt_Listener

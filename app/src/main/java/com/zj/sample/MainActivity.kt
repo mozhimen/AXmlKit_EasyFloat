@@ -1,47 +1,63 @@
 package com.zj.sample
 
 import android.animation.ValueAnimator
-import android.content.Intent
-import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Text
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
+import com.mozhimen.kotlin.utilk.android.content.startContext
 import com.mozhimen.kotlin.utilk.android.util.dp2px
+import com.mozhimen.kotlin.utilk.android.widget.showToast
+import com.mozhimen.mvvmk.bases.activity.viewbinding.BaseActivityVB
 import com.zj.easyfloat.EasyFloat
+import com.zj.sample.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
+class MainActivity : BaseActivityVB<ActivityMainBinding>() {
 
     fun show(view: View) {
-        EasyFloat
-            .layout(R.layout.layout_float_view)
-            .blackList(mutableListOf(ThirdActivity::class.java))
+        EasyFloat.instance
+            .customView(/*R.layout.layout_float_view*/
+                ComposeView(this@MainActivity).apply {
+                    setContent {
+                        Scaffold(modifier = Modifier.size(50.dp)) { innerPadding ->
+                            Text(
+                                text = "Android",
+                                modifier = Modifier.padding(innerPadding).clickable {
+                                    "Hello".showToast()
+                                }
+                            )
+                        }
+                    }
+                }
+            )
+            .addBlackList(mutableListOf(ThirdActivity::class.java))
             .layoutParams(initLayoutParams())
             .dragEnable(true)
             .setAutoMoveToEdge(true)
-            .listener {
-                initListener(it)
-            }
             .show(this)
+        EasyFloat.instance.getFloatContainer()?.let {
+            initListener(it)
+        }
     }
 
     fun dismiss(view: View) {
-        EasyFloat.dismiss(this)
+        EasyFloat.instance.dismiss(this)
     }
 
     fun jumpOne(view: View) {
-        val intent = Intent(this, SecondActivity::class.java)
-        startActivity(intent)
+        startContext<SecondActivity>()
     }
 
     fun jumpTwo(view: View) {
-        val intent = Intent(this, ThirdActivity::class.java)
-        startActivity(intent)
+        startContext<ThirdActivity>()
     }
 
     private fun initLayoutParams(): FrameLayout.LayoutParams {

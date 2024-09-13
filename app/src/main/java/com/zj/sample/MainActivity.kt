@@ -1,42 +1,65 @@
 package com.zj.sample
 
 import android.animation.ValueAnimator
+import android.app.Activity
+import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
-import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import com.mozhimen.kotlin.utilk.android.content.startContext
 import com.mozhimen.kotlin.utilk.android.util.dp2px
 import com.mozhimen.kotlin.utilk.android.widget.showToast
-import com.mozhimen.mvvmk.bases.activity.viewbinding.BaseActivityVB
 import com.zj.easyfloat.EasyFloat
-import com.zj.sample.databinding.ActivityMainBinding
 
-class MainActivity : BaseActivityVB<ActivityMainBinding>() {
+class MainActivity : Activity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
 
     fun show(view: View) {
         EasyFloat.instance
             .customView(/*R.layout.layout_float_view*/
-                ComposeView(this@MainActivity).apply {
-                    setContent {
-                        Scaffold(modifier = Modifier.size(50.dp)) { innerPadding ->
-                            Text(
-                                text = "Android",
-                                modifier = Modifier.padding(innerPadding).clickable {
-                                    "Hello".showToast()
+//                verticalLayout {
+//                    add(
+                        ComposeView(this@MainActivity).apply {
+                            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                            setContent {
+                                Box(
+                                    modifier = Modifier.size(50.dp)
+                                ) {
+                                    Text(
+                                        text = "Android",
+                                        modifier = Modifier.clickable {
+                                            "Hello".showToast()
+                                        }
+                                    )
                                 }
-                            )
+                            }
                         }
-                    }
-                }
+//                ,
+//                        lp = lParams { width = wrapContent;height = wrapContent }
+//                    )
+//                    add(
+//                        TextView(this@MainActivity).apply {
+//                            text = "Android"
+//                            setOnClickListener {
+//                                "Hello".showToast()
+//                            }
+//                        },
+//                        lp = lParams { width = wrapContent;height = wrapContent }
+//                    )
+//                }
             )
             .addBlackList(mutableListOf(ThirdActivity::class.java))
             .layoutParams(initLayoutParams())

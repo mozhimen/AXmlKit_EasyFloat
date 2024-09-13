@@ -100,8 +100,13 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
 //                setMagnetViewListener(_iLayoutKMagnetListener!!)
             setDragEnable(_dragEnable)
             setAutoMoveToEdge(_autoMoveToEdge)
+            if (findViewTreeLifecycleOwner() == null) {
+                setViewTreeLifecycleOwner(_savedStateRegistryOwnerProxy)
+            }
+            if (findViewTreeSavedStateRegistryOwner() == null) {
+                setViewTreeSavedStateRegistryOwner(_savedStateRegistryOwnerProxy)
+            }
         }
-
 //            getFrameLayoutContainer()?.addView(_layoutKMagnet)
 //        }
     }
@@ -119,13 +124,6 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
     }
 
     override fun attach(activity: Activity) {
-        if (activity.window.decorView.findViewTreeLifecycleOwner()==null){
-            activity.window.decorView.setViewTreeLifecycleOwner(getLifecycleOwner())
-        }
-        if (activity.window.decorView.findViewTreeSavedStateRegistryOwner()==null){
-            activity.window.decorView.setViewTreeSavedStateRegistryOwner(_savedStateRegistryOwnerProxy)
-        }
-//        androidx.lifecycle.ViewTreeLifecycleOwner.set(getWindow().getDecorView(), this)
         Log.d(TAG, "attach: ${activity}")
         attach(activity.getContentView<View>() as? FrameLayout)//getActivityRoot(activity))
     }

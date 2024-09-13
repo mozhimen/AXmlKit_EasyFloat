@@ -38,7 +38,7 @@ include ':AXmlKit'
 project(':AXmlKit').projectDir = new File("D:\\WorkSpace\\GitHub\\AXmlKit")
 include ':AXmlKit:layoutk_magnet'
 include ':AXmlKit:basic'
-//ALibKit_Jetpack
-include ':ALibKit_Jetpack'
-project(':ALibKit_Jetpack').projectDir = new File("D:\\WorkSpace\\GitHub\\ALibKit_Jetpack")
-include ':ALibKit_Jetpack:lifecycle_runtime'
+//ADslKit
+include ':ADslKit'
+project(':ADslKit').projectDir = new File("D:\\WorkSpace\\GitHub\\ADslKit")
+include ':ADslKit:dslk_anko'

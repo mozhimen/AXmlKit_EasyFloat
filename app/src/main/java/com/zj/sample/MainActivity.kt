@@ -11,14 +11,19 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
+import androidx.compose.runtime.Recomposer
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.platform.compositionContext
 import androidx.compose.ui.unit.dp
 import com.mozhimen.kotlin.utilk.android.content.startContext
 import com.mozhimen.kotlin.utilk.android.util.dp2px
 import com.mozhimen.kotlin.utilk.android.widget.showToast
 import com.zj.easyfloat.EasyFloat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class MainActivity : Activity() {
 
@@ -27,39 +32,34 @@ class MainActivity : Activity() {
         setContentView(R.layout.activity_main)
     }
 
+    private val _composeView by lazy {
+        val coroutineContext = AndroidUiDispatcher.CurrentThread
+        val coroutineScope = CoroutineScope(coroutineContext)
+        val reRecomposer = Recomposer(coroutineContext)
+        coroutineScope.launch {
+            reRecomposer.runRecomposeAndApplyChanges()
+        }
+        ComposeView(this@MainActivity).apply {
+            compositionContext = reRecomposer
+            setContent {
+                Box(
+                    modifier = Modifier.size(50.dp)
+                ) {
+                    Text(
+                        text = "Android",
+                        modifier = Modifier.clickable {
+                            "Hello".showToast()
+                        }
+                    )
+                }
+            }
+        }
+    }
+
     fun show(view: View) {
         EasyFloat.instance
             .customView(/*R.layout.layout_float_view*/
-//                verticalLayout {
-//                    add(
-                        ComposeView(this@MainActivity).apply {
-                            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-                            setContent {
-                                Box(
-                                    modifier = Modifier.size(50.dp)
-                                ) {
-                                    Text(
-                                        text = "Android",
-                                        modifier = Modifier.clickable {
-                                            "Hello".showToast()
-                                        }
-                                    )
-                                }
-                            }
-                        }
-//                ,
-//                        lp = lParams { width = wrapContent;height = wrapContent }
-//                    )
-//                    add(
-//                        TextView(this@MainActivity).apply {
-//                            text = "Android"
-//                            setOnClickListener {
-//                                "Hello".showToast()
-//                            }
-//                        },
-//                        lp = lParams { width = wrapContent;height = wrapContent }
-//                    )
-//                }
+                _composeView
             )
             .addBlackList(mutableListOf(ThirdActivity::class.java))
             .layoutParams(initLayoutParams())

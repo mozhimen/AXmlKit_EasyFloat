@@ -11,7 +11,9 @@ import android.widget.RelativeLayout
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.findViewTreeSavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.mozhimen.kotlin.elemk.androidx.lifecycle.SavedStateRegistryOwnerProxy
@@ -50,7 +52,7 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
     //    private var _iLayoutKMagnetListener: ILayoutKMagnetListener? = null
     private var _dragEnable = true
     private var _autoMoveToEdge = true
-    private val _savedStateRegistryOwnerProxy: SavedStateRegistryOwnerProxy by lazy { SavedStateRegistryOwnerProxy() }
+    private val _savedStateRegistryOwnerProxy: EasyFloatOwnerProxy by lazy { EasyFloatOwnerProxy() }
 
     ////////////////////////////////////////////////////////
 
@@ -105,6 +107,9 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
             }
             if (findViewTreeSavedStateRegistryOwner() == null) {
                 setViewTreeSavedStateRegistryOwner(_savedStateRegistryOwnerProxy)
+            }
+            if (findViewTreeViewModelStoreOwner() == null) {
+                setViewTreeViewModelStoreOwner(_savedStateRegistryOwnerProxy)
             }
         }
 //            getFrameLayoutContainer()?.addView(_layoutKMagnet)

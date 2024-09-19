@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import androidx.activity.findViewTreeOnBackPressedDispatcherOwner
+import androidx.activity.setViewTreeOnBackPressedDispatcherOwner
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
@@ -16,7 +18,6 @@ import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.findViewTreeSavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
-import com.mozhimen.kotlin.elemk.androidx.lifecycle.SavedStateRegistryOwnerProxy
 import com.mozhimen.kotlin.lintk.optins.OApiInit_ByLazy
 import com.mozhimen.kotlin.utilk.android.app.getContentView
 import com.mozhimen.kotlin.utilk.android.view.addViewSafe
@@ -52,15 +53,15 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
     //    private var _iLayoutKMagnetListener: ILayoutKMagnetListener? = null
     private var _dragEnable = true
     private var _autoMoveToEdge = true
-    private val _savedStateRegistryOwnerProxy: EasyFloatOwnerProxy by lazy { EasyFloatOwnerProxy() }
+    private val _easyFloatOwnerProxy: EasyFloatOwnerProxy by lazy { EasyFloatOwnerProxy() }
 
     ////////////////////////////////////////////////////////
 
     private var _layoutKMagnet: LayoutKMagnet? by Delegates.observable(null) { property, oldValue, newValue ->
         if (newValue != null) {
-            _savedStateRegistryOwnerProxy.onStart(NAME)
+            _easyFloatOwnerProxy.onStart(NAME)
         } else {
-            _savedStateRegistryOwnerProxy.onStop(NAME)
+            _easyFloatOwnerProxy.onStop(NAME)
         }
     }
 //    private var _contentViewRef: WeakReference<FrameLayout>? = null
@@ -68,13 +69,13 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
     ////////////////////////////////////////////////////////
 
     init {
-        _savedStateRegistryOwnerProxy.onCreate(NAME)
+        _easyFloatOwnerProxy.onCreate(NAME)
     }
 
     ////////////////////////////////////////////////////////
 
     override fun getLifecycleOwner(): LifecycleOwner {
-        return _savedStateRegistryOwnerProxy
+        return _easyFloatOwnerProxy
     }
 
     override fun getLayoutId(): Int {
@@ -103,13 +104,16 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
             setDragEnable(_dragEnable)
             setAutoMoveToEdge(_autoMoveToEdge)
             if (findViewTreeLifecycleOwner() == null) {
-                setViewTreeLifecycleOwner(_savedStateRegistryOwnerProxy)
+                setViewTreeLifecycleOwner(_easyFloatOwnerProxy)
             }
             if (findViewTreeSavedStateRegistryOwner() == null) {
-                setViewTreeSavedStateRegistryOwner(_savedStateRegistryOwnerProxy)
+                setViewTreeSavedStateRegistryOwner(_easyFloatOwnerProxy)
             }
             if (findViewTreeViewModelStoreOwner() == null) {
-                setViewTreeViewModelStoreOwner(_savedStateRegistryOwnerProxy)
+                setViewTreeViewModelStoreOwner(_easyFloatOwnerProxy)
+            }
+            if (findViewTreeOnBackPressedDispatcherOwner()==null){
+                setViewTreeOnBackPressedDispatcherOwner(_easyFloatOwnerProxy)
             }
         }
 //            getFrameLayoutContainer()?.addView(_layoutKMagnet)

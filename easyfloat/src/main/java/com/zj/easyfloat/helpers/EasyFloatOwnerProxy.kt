@@ -1,6 +1,9 @@
 package com.zj.easyfloat.helpers
 
-import androidx.activity.ComponentActivity
+import android.text.TextUtils
+import android.util.Log
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
@@ -9,6 +12,7 @@ import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import com.mozhimen.kotlin.elemk.androidx.lifecycle.LifecycleOwnerProxy
 import com.mozhimen.kotlin.lintk.optins.OApiInit_ByLazy
+import com.mozhimen.kotlin.utilk.android.os.UtilKBuildVersion
 
 /**
  * @ClassName SavedStateRegistryOwnerProxy
@@ -18,18 +22,54 @@ import com.mozhimen.kotlin.lintk.optins.OApiInit_ByLazy
  * @Version 1.0
  */
 @OApiInit_ByLazy
-class EasyFloatOwnerProxy : SavedStateRegistryOwner, LifecycleOwnerProxy(), ViewModelStoreOwner {
+class EasyFloatOwnerProxy : SavedStateRegistryOwner, LifecycleOwnerProxy(), ViewModelStoreOwner, OnBackPressedDispatcherOwner {
     protected val savedStateRegistryController = SavedStateRegistryController.create(this)
+    private var mOnBackPressedDispatcher: OnBackPressedDispatcher? = null
+    private var mViewModelStore: ViewModelStore? = null
 
     override val lifecycle: Lifecycle
         get() = lifecycleRegistry
-
     override val savedStateRegistry: SavedStateRegistry
         get() = savedStateRegistryController.savedStateRegistry
+    override val viewModelStore: ViewModelStore
+        get() {
+            ensureViewModelStore()
+            return mViewModelStore!!
+        }
+    override val onBackPressedDispatcher: OnBackPressedDispatcher
+        get() {
+            if (mOnBackPressedDispatcher == null) {
+                mOnBackPressedDispatcher = OnBackPressedDispatcher(Runnable {
+                    try {
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Log.e(TAG, "OnBackPressedDispatcher: ${e.message}")
+                    }/*catch (e: IllegalStateException) {
+                        if (!TextUtils.equals(e.message, "Can not perform this action after onSaveInstanceState")) {
+                            Log.e(TAG, "OnBackPressedDispatcher: ${e.message}")
+                        }
+                    } catch (e: NullPointerException) {
+                        if (!TextUtils.equals(e.message,
+                                "Attempt to invoke virtual method 'android.os.Handler "
+                                        + "android.app.FragmentHostCallback.getHandler()' on a "
+                                        + "null object reference")
+                        ) {
+                            Log.e(TAG, "OnBackPressedDispatcher: ${e.message}")
+                        }
+                    }*/
+                })
+            }
+            return mOnBackPressedDispatcher!!
+        }
+
+    //////////////////////////////////////////////////////////////////////////
 
     init {
         savedStateRegistryController.performAttach()
     }
+
+    //////////////////////////////////////////////////////////////////////////
 
     override fun onCreate(name: String) {
         savedStateRegistryController.performRestore(null)
@@ -41,13 +81,7 @@ class EasyFloatOwnerProxy : SavedStateRegistryOwner, LifecycleOwnerProxy(), View
         super.onDestroy(name)
     }
 
-    private var mViewModelStore: ViewModelStore? = null
-
-    override val viewModelStore: ViewModelStore
-        get() {
-            ensureViewModelStore()
-            return mViewModelStore!!
-        }
+    //////////////////////////////////////////////////////////////////////////
 
     private fun ensureViewModelStore() {
         if (mViewModelStore == null) {

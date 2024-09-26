@@ -2,6 +2,7 @@ package com.zj.easyfloat.commons
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.RectF
 import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
@@ -20,7 +21,7 @@ interface IEasyFloat<T> {
 
     fun getLayoutId(): Int
 
-    fun getFloatContainer(): LayoutKMagnet?
+    fun getFloatContainer(): FrameLayout?
 
     fun getLifecycleOwner(): LifecycleOwner
 
@@ -49,4 +50,6 @@ interface IEasyFloat<T> {
     fun dragEnable(dragEnable: Boolean): T
 
     fun setAutoMoveToEdge(autoMoveToEdge: Boolean): T
+
+    fun setInitMargin(margin: RectF): T
 }

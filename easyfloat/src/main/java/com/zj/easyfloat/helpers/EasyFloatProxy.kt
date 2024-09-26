@@ -2,10 +2,12 @@ package com.zj.easyfloat.helpers
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.RectF
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import androidx.activity.findViewTreeOnBackPressedDispatcherOwner
@@ -24,9 +26,11 @@ import com.mozhimen.kotlin.utilk.android.view.addViewSafe
 import com.mozhimen.kotlin.utilk.android.view.isAttachedToWindow_ofCompat
 import com.mozhimen.kotlin.utilk.android.view.removeView_ofParent
 import com.mozhimen.kotlin.utilk.commons.IUtilK
+import com.mozhimen.xmlk.basic.widgets.LayoutKFrame
 import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet
 import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet2
 import com.zj.easyfloat.commons.IEasyFloat
+import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
 
 /**
@@ -48,15 +52,17 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
     @LayoutRes
     private var _layoutId = 0 //R.layout.en_floating_view;
     private var _layout: View? = null
-    private var _layoutParams: ViewGroup.LayoutParams = getDefaultLayoutParams()
+    private var _layoutParams: FrameLayout.LayoutParams = getDefaultLayoutParams()
 
     //    private var _iLayoutKMagnetListener: ILayoutKMagnetListener? = null
     private var _dragEnable = true
     private var _autoMoveToEdge = true
+    private var _initMargin = RectF()
     private val _easyFloatOwnerProxy: EasyFloatOwnerProxy by lazy { EasyFloatOwnerProxy() }
 
     ////////////////////////////////////////////////////////
 
+    private var _layoutKMagnetContainer: LayoutKFrame? = null
     private var _layoutKMagnet: LayoutKMagnet? by Delegates.observable(null) { property, oldValue, newValue ->
         if (newValue != null) {
             _easyFloatOwnerProxy.onStart(NAME)
@@ -103,6 +109,7 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
 //                setMagnetViewListener(_iLayoutKMagnetListener!!)
             setDragEnable(_dragEnable)
             setAutoMoveToEdge(_autoMoveToEdge)
+            setInitMargin(_initMargin)
             if (findViewTreeLifecycleOwner() == null) {
                 setViewTreeLifecycleOwner(_easyFloatOwnerProxy)
             }
@@ -112,12 +119,20 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
             if (findViewTreeViewModelStoreOwner() == null) {
                 setViewTreeViewModelStoreOwner(_easyFloatOwnerProxy)
             }
-            if (findViewTreeOnBackPressedDispatcherOwner()==null){
+            if (findViewTreeOnBackPressedDispatcherOwner() == null) {
                 setViewTreeOnBackPressedDispatcherOwner(_easyFloatOwnerProxy)
             }
         }
 //            getFrameLayoutContainer()?.addView(_layoutKMagnet)
 //        }
+        if (isLayoutParamsMatchParent()) {
+            _layoutKMagnetContainer = LayoutKFrame(
+                context, _layoutKMagnet!!,
+                FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+                    setMargins(_layoutParams.leftMargin, _layoutParams.topMargin, _layoutParams.rightMargin, _layoutParams.bottomMargin)
+                }
+            )
+        }
     }
 
     override fun remove() {
@@ -128,7 +143,11 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
 //                getFrameLayoutContainer()?.removeView()
         }
         _layoutKMagnet = null
-
+        if (_layoutKMagnetContainer == null) return
+        if (_layoutKMagnetContainer!!.isAttachedToWindow_ofCompat()) {
+            _layoutKMagnetContainer!!.removeView_ofParent()
+        }
+        _layoutKMagnetContainer = null
 //        }
     }
 
@@ -147,7 +166,10 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
         }
 //        _contentViewRef = WeakReference(container)
         Log.d(TAG, "attach: ")
-        container.addViewSafe(_layoutKMagnet!!)
+        if (_layoutKMagnetContainer != null) {
+            container.addViewSafe(_layoutKMagnetContainer!!)
+        } else
+            container.addViewSafe(_layoutKMagnet!!)
     }
 
     override fun detach(activity: Activity) {
@@ -156,8 +178,11 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
     }
 
     override fun detach(container: FrameLayout?) {
-        if (_layoutKMagnet != null && container != null && _layoutKMagnet!!.isAttachedToWindow_ofCompat()) {
-            Log.d(TAG, "detach: ")
+        if (_layoutKMagnetContainer != null && container != null && _layoutKMagnetContainer!!.isAttachedToWindow_ofCompat()) {
+            Log.d(TAG, "detach: _layoutKMagnetContainer")
+            container.removeView(_layoutKMagnetContainer)
+        } else if (_layoutKMagnet != null && container != null && _layoutKMagnet!!.isAttachedToWindow_ofCompat()) {
+            Log.d(TAG, "detach: _layoutKMagnet")
             container.removeView(_layoutKMagnet)
         }
 //        if (getFrameLayoutContainer() === container) {
@@ -175,7 +200,10 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
 
     override fun layoutParams(layoutParams: FrameLayout.LayoutParams) {
         _layoutParams = layoutParams
-        _layoutKMagnet?.layoutParams = layoutParams
+        if (_layoutKMagnetContainer != null) {
+            _layoutKMagnetContainer?.layoutParams = layoutParams
+        } else
+            _layoutKMagnet?.layoutParams = layoutParams
     }
 
 //    override fun listener(magnetViewListener: ILayoutKMagnetListener) {
@@ -193,6 +221,11 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
         _layoutKMagnet?.setAutoMoveToEdge(autoMoveToEdge)
     }
 
+    override fun setInitMargin(margin: RectF) {
+        _initMargin = margin
+        _layoutKMagnet?.setInitMargin(margin)
+    }
+
     ////////////////////////////////////////////////////////
 
 //    private fun getFrameLayoutContainer(): FrameLayout? {
@@ -205,4 +238,7 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
         layoutParams.setMargins(MARGIN, layoutParams.topMargin, layoutParams.rightMargin, 500)
         return layoutParams
     }
+
+    private fun isLayoutParamsMatchParent(): Boolean =
+        _layoutParams.width == LayoutParams.MATCH_PARENT && _layoutParams.height == LayoutParams.MATCH_PARENT
 }

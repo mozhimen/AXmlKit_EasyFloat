@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.compositionContext
 import androidx.compose.ui.unit.dp
 import com.mozhimen.kotlin.utilk.android.content.startContext
 import com.mozhimen.kotlin.utilk.android.util.dp2px
+import com.mozhimen.kotlin.utilk.android.util.dp2pxI
 import com.mozhimen.kotlin.utilk.android.widget.showToast
 import com.zj.easyfloat.EasyFloat
 import kotlinx.coroutines.CoroutineScope
@@ -88,7 +89,8 @@ class MainActivity : Activity() {
             FrameLayout.LayoutParams.WRAP_CONTENT,
             FrameLayout.LayoutParams.WRAP_CONTENT
         )
-        params.gravity = Gravity.CENTER_VERTICAL or Gravity.START
+        params.gravity = Gravity.TOP or Gravity.START
+        params.setMargins(params.leftMargin,100.dp2pxI(),params.rightMargin,params.bottomMargin)
         //params.setMargins(0, params.topMargin, params.rightMargin, 500)
         return params
     }

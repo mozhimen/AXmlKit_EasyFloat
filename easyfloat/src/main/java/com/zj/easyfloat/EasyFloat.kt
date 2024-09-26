@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.graphics.RectF
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
@@ -78,6 +79,11 @@ class EasyFloat : BaseActivityLifecycleCallbacks(), IEasyFloat<EasyFloat>, IUtil
 //        return this
 //    }
 
+    @OptIn(OApiInit_ByLazy::class)
+    override fun setInitMargin(margin: RectF) :EasyFloat{
+        _easyFloatProxy.setInitMargin(margin)
+        return this
+    }
     /**
      * 是否可拖拽（位置是否固定）
      */

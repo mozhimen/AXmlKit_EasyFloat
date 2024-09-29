@@ -46,7 +46,7 @@ android {
 
 dependencies {
     implementation project(':SwiftKit:composek')
-    implementation project(':SwiftKit:mvvmk')
+    implementation project(':SwiftKit:bindk')
     implementation project(':ADslKit:dslk_anko')
 //    if (useLocal == "true") {
     implementation project(':easyfloat')

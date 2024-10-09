@@ -45,4 +45,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="HardcodedText" />
+
+    <Button
+        android:text="跳转并显示在opengl上"
+        android:onClick="startForth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="HardcodedText" />
 </LinearLayout>

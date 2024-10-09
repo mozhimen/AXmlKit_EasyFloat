@@ -42,3 +42,7 @@ include ':AXmlKit:basic'
 include ':ADslKit'
 project(':ADslKit').projectDir = new File("D:\\WorkSpace\\GitHub\\ADslKit")
 include ':ADslKit:dslk_anko'
+//AOpenGlKit
+include ':AOpenGlKit'
+project(':AOpenGlKit').projectDir = new File("D:\\WorkSpace\\GitHub\\AOpenGlKit")
+include ':AOpenGlKit:openglk_basic'

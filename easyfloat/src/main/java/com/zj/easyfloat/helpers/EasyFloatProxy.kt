@@ -168,8 +168,11 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
         Log.d(TAG, "attach: ")
         if (_layoutKMagnetContainer != null) {
             container.addViewSafe(_layoutKMagnetContainer!!)
-        } else
+            _layoutKMagnetContainer!!.bringToFront()
+        } else{
             container.addViewSafe(_layoutKMagnet!!)
+            _layoutKMagnetContainer!!.bringToFront()
+        }
     }
 
     override fun detach(activity: Activity) {

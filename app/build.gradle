@@ -48,6 +48,7 @@ dependencies {
     implementation project(':SwiftKit:composek')
     implementation project(':SwiftKit:bindk')
     implementation project(':ADslKit:dslk_anko')
+    implementation project(':AOpenGlKit:openglk_basic')
 //    if (useLocal == "true") {
     implementation project(':easyfloat')
 //    } else {

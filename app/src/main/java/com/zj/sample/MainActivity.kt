@@ -13,7 +13,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -231,6 +230,10 @@ class MainActivity : Activity() {
 
     fun startThird(view: View) {
         startContext<ThirdActivity>()
+    }
+
+    fun startForth(view: View) {
+        startContext<ForthActivity>()
     }
 
     ///////////////////////////////////////////////////////////////////////

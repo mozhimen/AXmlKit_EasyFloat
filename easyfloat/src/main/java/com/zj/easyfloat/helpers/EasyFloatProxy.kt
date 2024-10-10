@@ -3,6 +3,7 @@ package com.zj.easyfloat.helpers
 import android.app.Activity
 import android.content.Context
 import android.graphics.RectF
+import android.os.Build
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -21,6 +22,7 @@ import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.findViewTreeSavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.mozhimen.kotlin.lintk.optins.OApiInit_ByLazy
+import com.mozhimen.kotlin.utilk.BuildConfig
 import com.mozhimen.kotlin.utilk.android.app.getContentView
 import com.mozhimen.kotlin.utilk.android.view.addViewSafe
 import com.mozhimen.kotlin.utilk.android.view.isAttachedToWindow_ofCompat
@@ -131,7 +133,10 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
                 FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
                     setMargins(_layoutParams.leftMargin, _layoutParams.topMargin, _layoutParams.rightMargin, _layoutParams.bottomMargin)
                 }
-            )
+            )/*.apply {
+                if(BuildConfig.DEBUG)
+                    setBackgroundColor(0x30000000)
+            }*/
         }
     }
 
@@ -167,11 +172,13 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
 //        _contentViewRef = WeakReference(container)
         Log.d(TAG, "attach: ")
         if (_layoutKMagnetContainer != null) {
-            container.addViewSafe(_layoutKMagnetContainer!!)
+            Log.d(TAG, "attach: _layoutKMagnetContainer")
+            container.addViewSafe(_layoutKMagnetContainer!!, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             _layoutKMagnetContainer!!.bringToFront()
-        } else{
+        } else {
+            Log.d(TAG, "attach: _layoutKMagnet")
             container.addViewSafe(_layoutKMagnet!!)
-            _layoutKMagnetContainer!!.bringToFront()
+            _layoutKMagnet!!.bringToFront()
         }
     }
 

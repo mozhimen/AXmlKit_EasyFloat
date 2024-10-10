@@ -133,10 +133,9 @@ class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
                 FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
                     setMargins(_layoutParams.leftMargin, _layoutParams.topMargin, _layoutParams.rightMargin, _layoutParams.bottomMargin)
                 }
-            )/*.apply {
-                if(BuildConfig.DEBUG)
-                    setBackgroundColor(0x30000000)
-            }*/
+            ).apply {
+                setBackgroundColor(0x03000000)
+            }
         }
     }
 

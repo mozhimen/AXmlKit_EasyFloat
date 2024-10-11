@@ -33,11 +33,7 @@ interface IEasyFloat<T> {
 
     fun attach(activity: Activity): T
 
-    fun attach(container: FrameLayout?): T
-
     fun detach(activity: Activity): T
-
-    fun detach(container: FrameLayout?): T
 
     fun customView(view: View): T
 

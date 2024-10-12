@@ -1,13 +1,10 @@
-package com.zj.easyfloat.helpers
+package com.zj.easyfloat.bases
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.RectF
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup.LayoutParams
-import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import androidx.activity.findViewTreeOnBackPressedDispatcherOwner
@@ -21,8 +18,7 @@ import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.findViewTreeSavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.mozhimen.kotlin.lintk.optins.OApiInit_ByLazy
-import com.mozhimen.kotlin.utilk.android.view.addViewSafe
-import com.mozhimen.kotlin.utilk.android.view.removeViewSafe
+import com.mozhimen.kotlin.utilk.BuildConfig
 import com.mozhimen.kotlin.utilk.android.view.isAttachedToWindow_ofCompat
 import com.mozhimen.kotlin.utilk.android.view.removeView_ofParent
 import com.mozhimen.kotlin.utilk.commons.IUtilK
@@ -30,24 +26,19 @@ import com.mozhimen.xmlk.basic.widgets.LayoutKFrame
 import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet
 import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet2
 import com.zj.easyfloat.commons.IEasyFloat
+import com.zj.easyfloat.cons.CFloatParams
+import com.zj.easyfloat.helpers.EasyFloatOwnerProxy
 import kotlin.properties.Delegates
 
 /**
- * @ClassName EasyFloatProxy
+ * @ClassName BaseEasyFloatProxy
  * @Description TODO
  * @Author mozhimen
- * @Date 2024/9/11
+ * @Date 2024/10/12
  * @Version 1.0
  */
 @OApiInit_ByLazy
-open class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
-
-    companion object {
-        const val MARGIN = 0//13
-    }
-
-    ////////////////////////////////////////////////////////
-
+abstract class BaseEasyFloatProxy : IEasyFloat<Unit>, IUtilK {
     @LayoutRes
     private var _layoutId = 0 //R.layout.en_floating_view;
     private var _layout: View? = null
@@ -72,7 +63,7 @@ open class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
     ////////////////////////////////////////////////////////
 
     init {
-        _easyFloatOwnerProxy.onCreate(NAME)
+        _easyFloatOwnerProxy.onCreate(this.NAME)
     }
 
     ////////////////////////////////////////////////////////
@@ -124,7 +115,10 @@ open class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
                     setMargins(_layoutParams.leftMargin, _layoutParams.topMargin, _layoutParams.rightMargin, _layoutParams.bottomMargin)
                 }
             ).apply {
-                setBackgroundColor(0x03000000)
+                if (BuildConfig.DEBUG)
+                    setBackgroundColor(0x80000000.toInt())
+                else
+                    setBackgroundColor(0x03000000)
             }
         }
     }
@@ -140,35 +134,6 @@ open class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
             _layoutKMagnetContainer!!.removeView_ofParent()
         }
         _layoutKMagnetContainer = null
-    }
-
-    override fun attach(activity: Activity) {
-        Log.d(TAG, "attach: ${activity}")
-        if (_layoutKMagnet == null) {
-            Log.w(TAG, "attach: _layoutKMagnet == null generate")
-            add(activity.applicationContext)
-        }
-//        _contentViewRef = WeakReference(container)
-        Log.d(TAG, "attach: ")
-        if (_layoutKMagnetContainer != null) {
-            Log.d(TAG, "attach: _layoutKMagnetContainer")
-            activity.windowManager.addViewSafe(_layoutKMagnetContainer!!, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-        } else {
-            Log.d(TAG, "attach: _layoutKMagnet")
-            activity.windowManager.addViewSafe(_layoutKMagnet!!, WindowManager.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT))
-        }
-    }
-
-
-    override fun detach(activity: Activity) {
-        Log.d(TAG, "detach: ${activity}")
-        if (_layoutKMagnetContainer != null) {
-            Log.d(TAG, "detach: _layoutKMagnetContainer")
-            activity.windowManager.removeViewSafe(_layoutKMagnetContainer!!)
-        } else if (_layoutKMagnet != null ) {
-            Log.d(TAG, "detach: _layoutKMagnet")
-            activity.windowManager.removeViewSafe(_layoutKMagnet!!)
-        }
     }
 
     override fun customView(view: View) {
@@ -207,7 +172,7 @@ open class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
     private fun getDefaultLayoutParams(): FrameLayout.LayoutParams {
         val layoutParams = FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
         layoutParams.gravity = Gravity.BOTTOM or Gravity.START
-        layoutParams.setMargins(MARGIN, layoutParams.topMargin, layoutParams.rightMargin, 500)
+        layoutParams.setMargins(CFloatParams.MARGIN, layoutParams.topMargin, layoutParams.rightMargin, 500)
         return layoutParams
     }
 

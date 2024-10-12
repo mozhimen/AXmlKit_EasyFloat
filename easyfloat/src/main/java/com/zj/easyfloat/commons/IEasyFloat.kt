@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.LifecycleOwner
-import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet
 
 /**
  * @ClassName IEasyFloat
@@ -35,13 +34,13 @@ interface IEasyFloat<T> {
 
     fun detach(activity: Activity): T
 
+    //////////////////////////////////////////////////
+
     fun customView(view: View): T
 
     fun customView(@LayoutRes intLayoutId: Int): T
 
     fun layoutParams(layoutParams: FrameLayout.LayoutParams): T
-
-//    fun listener(magnetViewListener: ILayoutKMagnetListener): T
 
     fun dragEnable(dragEnable: Boolean): T
 

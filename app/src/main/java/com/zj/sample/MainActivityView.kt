@@ -32,11 +32,11 @@ import androidx.compose.ui.unit.dp
 import com.mozhimen.kotlin.utilk.android.content.startContext
 import com.mozhimen.kotlin.utilk.android.util.dp2px
 import com.mozhimen.kotlin.utilk.android.widget.showToast
-import com.zj.easyfloat.EasyFloat2
+import com.zj.easyfloat.EasyFloatWinMgr
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class MainActivity2 : Activity() {
+class MainActivityView : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,16 +46,16 @@ class MainActivity2 : Activity() {
     ///////////////////////////////////////////////////////////////////////
 
     fun showSimple(view: View) {
-        if (EasyFloat2.instance.isRegisterActivityLifecycleCallbacks())
+        if (EasyFloatWinMgr.instance.isRegisterActivityLifecycleCallbacks())
             return
-        EasyFloat2.instance
+        EasyFloatWinMgr.instance
             .customView(R.layout.layout_float_view)
             .addBlackList(mutableListOf(ThirdActivity::class.java))
             .layoutParams(getLayoutParamsDefault())
             .dragEnable(true)
             .setAutoMoveToEdge(true)
             .show(this)
-        EasyFloat2.instance.getFloatContainer()?.let {
+        EasyFloatWinMgr.instance.getFloatContainer()?.let {
             initListener(it)
         }
     }
@@ -75,9 +75,9 @@ class MainActivity2 : Activity() {
     ///////////////////////////////////////////////////////////////////////
 
     fun showCompose(view: View) {
-        if (EasyFloat2.instance.isRegisterActivityLifecycleCallbacks())
+        if (EasyFloatWinMgr.instance.isRegisterActivityLifecycleCallbacks())
             return
-        EasyFloat2.instance
+        EasyFloatWinMgr.instance
             .customView(
                 getComposeView()
             )
@@ -104,7 +104,7 @@ class MainActivity2 : Activity() {
         coroutineScope.launch {
             reRecomposer.runRecomposeAndApplyChanges()
         }//如果使用compose, 一定要自己构建重组器, 不然reRecomposer detach from viewTree使点击事件无效
-        return ComposeView(this@MainActivity2).apply {
+        return ComposeView(this@MainActivityView).apply {
             compositionContext = reRecomposer
             setContent {
                 Box(
@@ -128,9 +128,9 @@ class MainActivity2 : Activity() {
 
     //高阶用法, 可以折叠展开成全屏的遮罩悬浮窗, 可设置初始位置
     fun showResizeFullScreen(view: View) {
-        if (EasyFloat2.instance.isRegisterActivityLifecycleCallbacks())
+        if (EasyFloatWinMgr.instance.isRegisterActivityLifecycleCallbacks())
             return
-        EasyFloat2.instance
+        EasyFloatWinMgr.instance
             .customView(
                 getComposeView2()
             )
@@ -158,7 +158,7 @@ class MainActivity2 : Activity() {
         coroutineScope.launch {
             reRecomposer.runRecomposeAndApplyChanges()
         }//如果使用compose, 一定要自己构建重组器, 不然reRecomposer detach from viewTree使点击事件无效
-        return ComposeView(this@MainActivity2).apply {
+        return ComposeView(this@MainActivityView).apply {
             compositionContext = reRecomposer
             setContent {
                 var isFold by remember {
@@ -219,7 +219,7 @@ class MainActivity2 : Activity() {
     ///////////////////////////////////////////////////////////////////////
 
     fun dismiss(view: View) {
-        EasyFloat2.instance.dismiss(this)
+        EasyFloatWinMgr.instance.dismiss(this)
     }
 
     ///////////////////////////////////////////////////////////////////////

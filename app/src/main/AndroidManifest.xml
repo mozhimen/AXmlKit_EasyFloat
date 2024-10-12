@@ -11,7 +11,8 @@
         <activity android:name="com.zj.sample.ForthActivity"></activity>
         <activity android:name="com.zj.sample.ThirdActivity"></activity>
         <activity android:name="com.zj.sample.SecondActivity" />
-        <activity android:name="com.zj.sample.MainActivity" android:exported="true">
+        <activity android:name="com.zj.sample.MainActivityView" android:exported="true"/>
+        <activity android:name="com.zj.sample.MainActivityWinMgr" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

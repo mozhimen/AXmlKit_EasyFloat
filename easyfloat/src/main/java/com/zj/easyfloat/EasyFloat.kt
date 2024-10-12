@@ -14,64 +14,63 @@ import com.mozhimen.kotlin.lintk.optins.OApiInit_ByLazy
 import com.mozhimen.kotlin.utilk.commons.IUtilK
 import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet
 import com.zj.easyfloat.commons.IEasyFloat
-import com.zj.easyfloat.commons.IEasyFloat2
-import com.zj.easyfloat.helpers.EasyFloatProxy2
+import com.zj.easyfloat.helpers.EasyFloatProxy
 import java.util.concurrent.atomic.AtomicBoolean
 
 @SuppressLint("StaticFieldLeak")
-class EasyFloat2 : BaseActivityLifecycleCallbacks(), IEasyFloat<EasyFloat2>, IEasyFloat2<EasyFloat2>, IUtilK {
+class EasyFloat : BaseActivityLifecycleCallbacks(), IEasyFloat<EasyFloat>, IUtilK {
     companion object {
         @JvmStatic
         val instance = INSTANCE.holder
     }
 
     private object INSTANCE {
-        val holder = EasyFloat2()
+        val holder = EasyFloat()
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
 
     @OptIn(OApiInit_ByLazy::class)
-    private val _easyFloatProxy2 by lazy { EasyFloatProxy2() }
+    private val _easyFloatProxy by lazy { EasyFloatProxy() }
     private val _blackList = mutableListOf<Class<*>>()
     private val _isAdd = AtomicBoolean(false)
 
     ///////////////////////////////////////////////////////////////////////////////////
     @OptIn(OApiInit_ByLazy::class)
     override fun getLifecycleOwner(): LifecycleOwner {
-        return _easyFloatProxy2.getLifecycleOwner()
+        return _easyFloatProxy.getLifecycleOwner()
     }
 
     @OptIn(OApiInit_ByLazy::class)
     override fun getFloatContainer(): LayoutKMagnet? {
-        return _easyFloatProxy2.getFloatContainer()
+        return _easyFloatProxy.getFloatContainer()
     }
 
     @OptIn(OApiInit_ByLazy::class)
     override fun getLayoutId(): Int {
-        return _easyFloatProxy2.getLayoutId()
+        return _easyFloatProxy.getLayoutId()
     }
 
     @OptIn(OApiInit_ByLazy::class)
     override fun getLayout(): View? {
-        return _easyFloatProxy2.getLayout()
+        return _easyFloatProxy.getLayout()
     }
 
     @OptIn(OApiInit_ByLazy::class)
-    override fun customView(intLayoutId: Int): EasyFloat2 {
-        _easyFloatProxy2.customView(intLayoutId)
+    override fun customView(intLayoutId: Int): EasyFloat {
+        _easyFloatProxy.customView(intLayoutId)
         return this
     }
 
     @OptIn(OApiInit_ByLazy::class)
-    override fun customView(view: View): EasyFloat2 {
-        _easyFloatProxy2.customView(view)
+    override fun customView(view: View): EasyFloat {
+        _easyFloatProxy.customView(view)
         return this
     }
 
     @OptIn(OApiInit_ByLazy::class)
-    override fun layoutParams(layoutParams: FrameLayout.LayoutParams): EasyFloat2 {
-        _easyFloatProxy2.layoutParams(layoutParams)
+    override fun layoutParams(layoutParams: FrameLayout.LayoutParams): EasyFloat {
+        _easyFloatProxy.layoutParams(layoutParams)
         return this
     }
 
@@ -81,8 +80,8 @@ class EasyFloat2 : BaseActivityLifecycleCallbacks(), IEasyFloat<EasyFloat2>, IEa
 //    }
 
     @OptIn(OApiInit_ByLazy::class)
-    override fun setInitMargin(margin: RectF): EasyFloat2 {
-        _easyFloatProxy2.setInitMargin(margin)
+    override fun setInitMargin(margin: RectF): EasyFloat {
+        _easyFloatProxy.setInitMargin(margin)
         return this
     }
 
@@ -90,8 +89,8 @@ class EasyFloat2 : BaseActivityLifecycleCallbacks(), IEasyFloat<EasyFloat2>, IEa
      * 是否可拖拽（位置是否固定）
      */
     @OptIn(OApiInit_ByLazy::class)
-    override fun dragEnable(dragEnable: Boolean): EasyFloat2 {
-        _easyFloatProxy2.dragEnable(dragEnable)
+    override fun dragEnable(dragEnable: Boolean): EasyFloat {
+        _easyFloatProxy.dragEnable(dragEnable)
         return this
     }
 
@@ -99,50 +98,38 @@ class EasyFloat2 : BaseActivityLifecycleCallbacks(), IEasyFloat<EasyFloat2>, IEa
      * 是否自动靠边
      */
     @OptIn(OApiInit_ByLazy::class)
-    override fun setAutoMoveToEdge(autoMoveToEdge: Boolean): EasyFloat2 {
-        _easyFloatProxy2.setAutoMoveToEdge(autoMoveToEdge)
+    override fun setAutoMoveToEdge(autoMoveToEdge: Boolean): EasyFloat {
+        _easyFloatProxy.setAutoMoveToEdge(autoMoveToEdge)
         return this
     }
 
     @OptIn(OApiInit_ByLazy::class)
-    override fun add(context: Context): EasyFloat2 {
-        _easyFloatProxy2.add(context)
+    override fun add(context: Context): EasyFloat {
+        _easyFloatProxy.add(context)
         return this
     }
 
     @OptIn(OApiInit_ByLazy::class)
-    override fun remove(): EasyFloat2 {
-        _easyFloatProxy2.remove()
+    override fun remove(): EasyFloat {
+        _easyFloatProxy.remove()
         return this
     }
 
     @OptIn(OApiInit_ByLazy::class)
-    override fun attach(activity: Activity): EasyFloat2 {
-        _easyFloatProxy2.attach(activity)
+    override fun attach(activity: Activity): EasyFloat {
+        _easyFloatProxy.attach(activity)
         return this
     }
 
     @OptIn(OApiInit_ByLazy::class)
-    override fun attach(container: FrameLayout?): EasyFloat2 {
-        _easyFloatProxy2.attach(container)
-        return this
-    }
-
-    @OptIn(OApiInit_ByLazy::class)
-    override fun detach(activity: Activity): EasyFloat2 {
-        _easyFloatProxy2.detach(activity)
-        return this
-    }
-
-    @OptIn(OApiInit_ByLazy::class)
-    override fun detach(container: FrameLayout?): EasyFloat2 {
-        _easyFloatProxy2.detach(container)
+    override fun detach(activity: Activity): EasyFloat {
+        _easyFloatProxy.detach(activity)
         return this
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
 
-    fun addBlackList(blackList: MutableList<Class<*>>): EasyFloat2 {
+    fun addBlackList(blackList: MutableList<Class<*>>): EasyFloat {
         _blackList.addAll(blackList)
         return this
     }

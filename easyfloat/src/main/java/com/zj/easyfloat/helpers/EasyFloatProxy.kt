@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup.LayoutParams
+import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import androidx.activity.findViewTreeOnBackPressedDispatcherOwner
@@ -20,8 +21,8 @@ import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.findViewTreeSavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.mozhimen.kotlin.lintk.optins.OApiInit_ByLazy
-import com.mozhimen.kotlin.utilk.android.app.getContentView
 import com.mozhimen.kotlin.utilk.android.view.addViewSafe
+import com.mozhimen.kotlin.utilk.android.view.removeViewSafe
 import com.mozhimen.kotlin.utilk.android.view.isAttachedToWindow_ofCompat
 import com.mozhimen.kotlin.utilk.android.view.removeView_ofParent
 import com.mozhimen.kotlin.utilk.commons.IUtilK
@@ -154,19 +155,19 @@ open class EasyFloatProxy : IEasyFloat<Unit>, IUtilK {
             activity.windowManager.addViewSafe(_layoutKMagnetContainer!!, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         } else {
             Log.d(TAG, "attach: _layoutKMagnet")
-            activity.windowManager.addViewSafe(_layoutKMagnet!!)
+            activity.windowManager.addViewSafe(_layoutKMagnet!!, WindowManager.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT))
         }
     }
 
 
     override fun detach(activity: Activity) {
         Log.d(TAG, "detach: ${activity}")
-        if (_layoutKMagnetContainer != null && _layoutKMagnetContainer!!.isAttachedToWindow_ofCompat()) {
+        if (_layoutKMagnetContainer != null) {
             Log.d(TAG, "detach: _layoutKMagnetContainer")
-            activity.windowManager.removeViewSafe(_layoutKMagnetContainer)
-        } else if (_layoutKMagnet != null && _layoutKMagnet!!.isAttachedToWindow_ofCompat()) {
+            activity.windowManager.removeViewSafe(_layoutKMagnetContainer!!)
+        } else if (_layoutKMagnet != null ) {
             Log.d(TAG, "detach: _layoutKMagnet")
-            activity.windowManager.removeViewSafe(_layoutKMagnet)
+            activity.windowManager.removeViewSafe(_layoutKMagnet!!)
         }
     }
 

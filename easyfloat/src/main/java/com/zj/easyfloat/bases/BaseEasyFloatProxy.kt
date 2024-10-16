@@ -24,7 +24,6 @@ import com.mozhimen.kotlin.utilk.android.view.removeView_ofParent
 import com.mozhimen.kotlin.utilk.commons.IUtilK
 import com.mozhimen.xmlk.basic.widgets.LayoutKFrame
 import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet
-import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet2
 import com.zj.easyfloat.commons.IEasyFloat
 import com.zj.easyfloat.cons.CFloatParams
 import com.zj.easyfloat.helpers.EasyFloatOwnerProxy
@@ -87,9 +86,9 @@ abstract class BaseEasyFloatProxy : IEasyFloat<Unit>, IUtilK {
     override fun add(context: Context) {
         if (_layoutKMagnet != null) return
         _layoutKMagnet = if (_layout != null) {
-            LayoutKMagnet2(context, _layout!!)
+            LayoutKMagnet(context, _layout!!)
         } else {
-            LayoutKMagnet2(context, _layoutId)
+            LayoutKMagnet(context, _layoutId)
         }.apply {
             layoutParams = _layoutParams
             setDragEnable(_dragEnable)
@@ -164,7 +163,6 @@ abstract class BaseEasyFloatProxy : IEasyFloat<Unit>, IUtilK {
 
     override fun setInitMargin(margin: RectF) {
         _initMargin = margin
-        _layoutKMagnet?.setInitMargin(margin)
     }
 
     ////////////////////////////////////////////////////////

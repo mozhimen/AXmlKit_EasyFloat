@@ -8,7 +8,7 @@ import com.mozhimen.kotlin.lintk.optins.OApiCall_BindLifecycle
 import com.mozhimen.kotlin.lintk.optins.OApiInit_ByLazy
 import com.mozhimen.kotlin.utilk.android.util.UtilKLogWrapper
 import com.mozhimen.xmlk.layoutk.magnet.LayoutKMagnet
-import com.zj.easyfloat.EasyFloat
+import com.zj.easyfloat.EasyFloatView
 
 /**
  * @ClassName XmlKEasyFloatProxy
@@ -21,11 +21,11 @@ import com.zj.easyfloat.EasyFloat
 @OApiCall_BindLifecycle
 class XmlKEasyFloatProxy(private var _activity: Activity?) : BaseWakeBefDestroyLifecycleObserver() {
 
-    private val _eastFloat: EasyFloat by lazy { EasyFloat.instance }
+    private val _eastFloat: EasyFloatView by lazy { EasyFloatView.instance }
 
     ////////////////////////////////////////////////////////////////////////
 
-    fun init(block: IExt_AListener<EasyFloat, EasyFloat>): EasyFloat {
+    fun init(block: IExt_AListener<EasyFloatView, EasyFloatView>): EasyFloatView {
         //        EasyFloat
         //            .layout(R.layout.layout_float_view)
         //            .blackList(mutableListOf(ThirdActivity::class.java))
